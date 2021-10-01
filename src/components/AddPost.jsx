@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { postsQ } from '../firebase';
+import { addDoc } from 'firebase/firestore';
+
 class AddPost extends Component {
   state = { title: '', content: '' };
 
@@ -11,7 +14,6 @@ class AddPost extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { onCreate } = this.props;
     const { title, content } = this.state;
 
     const post = {
@@ -28,7 +30,7 @@ class AddPost extends Component {
       createdAt: new Date(),
     }
 
-    onCreate(post);
+    addDoc(postsQ, post);
 
     this.setState({ title: '', content: '' });
   };
