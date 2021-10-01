@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-// import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, query } from 'firebase/firestore';
+// import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
 
 const config = {
   apiKey: "AIzaSyAMZuAbobty7S1IqopYN6FZU5zpXLIzTOA",
@@ -12,10 +13,11 @@ const config = {
 };
 
 // firebase.initializeApp(config); // firebase v8
-const firebaseApp = initializeApp({ config }); // firebase v9
+const firebaseApp = initializeApp(config); // firebase v9
 
 // export const firestore = firebase.firestore(); // firebase v8
-// export const firestore = getFirestore(firebaseApp); // firebase v9
+export const db = getFirestore(firebaseApp); // firebase v9
+export const postsQ = query(collection(db, 'posts'));
 
 window.firebase = firebaseApp; // this is for quick debugging in the browser
 
