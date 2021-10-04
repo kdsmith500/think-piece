@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, query, doc, getDoc, setDoc } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from "firebase/auth";
 
 const config = {
   apiKey: "AIzaSyAMZuAbobty7S1IqopYN6FZU5zpXLIzTOA",
@@ -20,6 +20,7 @@ export const postsQ = query(collection(db, 'posts'));
 export const auth = getAuth(firebaseApp);
 export const provider = new GoogleAuthProvider(auth);
 export const signInWithGoogle = () => signInWithPopup(auth, provider);
+export const signInWithEmailAndPass = (email, password) => signInWithEmailAndPassword(auth, email, password);
 export const signOutAuth = () => signOut(auth);
 
 window.firebase = firebaseApp; // this is for quick debugging in the browser
