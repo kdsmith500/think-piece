@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { postsQ } from '../firebase';
+import { postsQ, auth } from '../firebase';
 import { addDoc } from 'firebase/firestore';
 
 class AddPost extends Component {
@@ -15,15 +15,16 @@ class AddPost extends Component {
     event.preventDefault();
 
     const { title, content } = this.state;
+    const { uid, displayName, email, photoURL } = auth.currentUser || {};
 
     const post = {
       title,
       content,
       user: {
-        uid: '1111',
-        displayName: 'Steve Kinney',
-        email: 'steve@mailinator.com',
-        photoURL: 'http://placekitten.com/g/200/200',
+        uid,
+        displayName,
+        email,
+        photoURL
       },
       favorites: 0,
       comments: 0,
