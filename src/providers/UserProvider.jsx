@@ -1,6 +1,7 @@
 import React, { Component, createContext } from 'react';
 
 import { onAuthStateChanged } from "firebase/auth";
+import { onSnapshot } from 'firebase/firestore';
 
 import { auth, createUserProfileDocument } from '../firebase';
 
@@ -15,9 +16,16 @@ class UserProvider extends Component {
 
   componentDidMount = async () => {
     this.unsubscribeFromAuth = onAuthStateChanged(auth, async userAuth => {
-      const user = await createUserProfileDocument(userAuth);
 
-      this.setState({ user });
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        onSnapshot(userRef, (snapshot) => {
+          this.setState({ user: { uid: snapshot.id, ...snapshot.data()} })
+        });
+
+      }
+
+      this.setState({ userAuth });
     })
   }
 

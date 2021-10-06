@@ -57,9 +57,7 @@ export const getUserDocument = async (uid) => {
   if (!uid) return null;
 
   try {
-    const userDocument = await getDoc(doc(db, 'users', uid));
-
-    return { uid, ...userDocument.data() };
+    return doc(db, 'users', uid);
   } catch (error) {
     console.error('Error fetching user', error.message);
   }
