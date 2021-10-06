@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import { doc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-import { auth, db } from '../firebase';
+import { auth, db, storage } from '../firebase';
 
 class UserProfile extends Component {
   state = {
@@ -19,6 +20,10 @@ class UserProfile extends Component {
     return doc(db, 'users', this.uid);
   }
 
+  get file() {
+    return this.imageInput && this.imageInput.files[0];
+  }
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -30,6 +35,23 @@ class UserProfile extends Component {
 
     if (displayName) {
       updateDoc(this.userRef, { displayName });
+    }
+
+    if (this.file) {
+      // storage // v8 firebase
+      //   .ref()
+      //   .child('user-profiles')
+      //   .child(this.uid)
+      //   .child(this.file.name)
+      //   .put(this.file)
+      //   .then(res => res.ref.getDownloadURL())
+      //   .then(photoURL => this.userRef.update({ photoURL }));
+
+      const storageRef = ref(storage, `user-profiles/${this.uid}/${this.file.name}`);
+
+      uploadBytes(storageRef, this.file)
+        .then(res => getDownloadURL(res.ref))
+        .then(photoURL => updateDoc(this.userRef, { photoURL }));
     }
   }
 
